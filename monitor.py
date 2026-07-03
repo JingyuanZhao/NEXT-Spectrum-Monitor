@@ -62,7 +62,7 @@ def send_email(new_folders):
     to_email = os.environ["TO_EMAIL"]
 
     urls = "\n".join(f"{URL}{name}/" for name in new_folders)
-    subject = f"[china-vo] 发现新文件夹: {', '.join(new_folders)}"
+    subject = f"[星明天文台NEXT] 新光谱观测文件夹: {', '.join(new_folders)}"
     body = f"检测到以下新日期文件夹：\n\n{urls}\n\n-- \n自动监控提醒"
 
     msg = MIMEText(body, "plain", "utf-8")

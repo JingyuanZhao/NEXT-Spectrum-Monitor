@@ -1,4 +1,4 @@
-name: Monitor china-vo new folders
+name: 星明天文台NEXT光谱观测邮件提醒
 
 on:
   schedule:

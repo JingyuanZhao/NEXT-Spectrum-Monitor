@@ -1,6 +1,6 @@
-# china-vo 新文件夹邮件提醒
+# 星明天文台NEXT光谱观测邮件提醒
 
-监控 `https://download.china-vo.org/psp/next/` 页面，当检测到新的 8 位日期命名文件夹（如 `20260629`）时，发送邮件提醒到 `recipient@foxmail.com`。
+监控 `https://download.china-vo.org/psp/next/` 页面，当检测到星明天文台 NEXT 项目新的光谱观测日期文件夹（如 `20260629`）时，发送邮件提醒到 `recipient@foxmail.com`。
 
 ## 方案说明：电脑关机也能提醒
 
@@ -32,7 +32,7 @@
    | `FROM_EMAIL` | 发件人地址 | `your-email@gmail.com` |
    | `TO_EMAIL` | 收件人地址 | `recipient@foxmail.com` |
 
-3. 进入 **Actions** 页面，找到 `Monitor china-vo new folders`，点击 **Run workflow** 手动运行一次。
+3. 进入 **Actions** 页面，找到 `星明天文台NEXT光谱观测邮件提醒`，点击 **Run workflow** 手动运行一次。
 4. 首次运行会初始化 `state.json`，不会发送邮件。之后每 3 小时自动检查一次。
 
 > 注意：GitHub 规定，如果仓库连续 60 天没有任何提交/活动，定时任务会被自动暂停。可以偶尔手动触发一次，或定时往仓库里 push 一个空提交保持活跃。
