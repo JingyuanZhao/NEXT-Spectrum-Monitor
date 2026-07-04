@@ -1,6 +1,6 @@
 # 星明天文台NEXT光谱观测邮件提醒
 
-监控 `https://download.china-vo.org/psp/next/` 页面，当检测到星明天文台 NEXT 项目新的光谱观测日期文件夹（如 `20260629`）时，发送邮件提醒到 `recipient@foxmail.com`。
+监控 `https://download.china-vo.org/psp/next/` 页面，当检测到星明天文台 NEXT 项目新的光谱观测日期文件夹（如 `20260629`）时，发送邮件提醒到 `recipient&#64;foxmail&#46;com`。
 
 ## 文件说明
 
@@ -20,10 +20,10 @@
    |-----------|------|----------|
    | `SMTP_HOST` | SMTP 服务器地址 | `smtp.gmail.com` |
    | `SMTP_PORT` | SMTP 端口 | `587` |
-   | `SMTP_USER` | 发件邮箱账号 | `your-email@gmail.com` |
+   | `SMTP_USER` | 发件邮箱账号 | `your-email&#64;gmail&#46;com` |
    | `SMTP_PASS` | 邮箱应用专用密码/授权码 | 你的 Gmail 应用专用密码 |
-   | `FROM_EMAIL` | 发件人地址 | `your-email@gmail.com` |
-   | `TO_EMAIL` | 收件人地址 | `recipient@foxmail.com` |
+   | `FROM_EMAIL` | 发件人地址 | `your-email&#64;gmail&#46;com` |
+   | `TO_EMAIL` | 收件人地址 | `recipient&#64;foxmail&#46;com` |
 
 3. 进入 **Actions** 页面，找到 `星明天文台NEXT光谱观测邮件提醒`，点击 **Run workflow** 手动运行一次。
 4. 首次运行会初始化 `state.json`，不会发送邮件。之后每 3 小时自动检查一次。
