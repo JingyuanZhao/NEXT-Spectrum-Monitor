@@ -1,5 +1,6 @@
 import os
 import re
+import sys
 import json
 import smtplib
 import time
@@ -61,6 +62,8 @@ def save_seen(folders):
 
 
 def send_email(new_folders):
+    import socket
+
     smtp_host = os.environ["SMTP_HOST"]
     smtp_port = int(os.environ["SMTP_PORT"])
     smtp_user = os.environ["SMTP_USER"]
@@ -77,19 +80,36 @@ def send_email(new_folders):
     msg["From"] = from_email
     msg["To"] = to_email
 
-    if smtp_port == 465:
-        server = smtplib.SMTP_SSL(smtp_host, smtp_port, timeout=30)
-    else:
-        server = smtplib.SMTP(smtp_host, smtp_port, timeout=30)
-        server.starttls()
+    # 设置全局 socket 超时（对 login/sendmail/quit 都生效）
+    old_timeout = socket.getdefaulttimeout()
+    socket.setdefaulttimeout(60)
+    server = None
+    try:
+        if smtp_port == 465:
+            server = smtplib.SMTP_SSL(smtp_host, smtp_port)
+        else:
+            server = smtplib.SMTP(smtp_host, smtp_port)
+            server.starttls()
 
-    with server:
         server.login(smtp_user, smtp_pass)
         server.sendmail(from_email, [to_email], msg.as_string())
+        server.quit()
+    finally:
+        socket.setdefaulttimeout(old_timeout)
+        if server is not None:
+            try:
+                server.close()
+            except Exception:
+                pass
 
 
 def main():
+    now_beijing = datetime.now(BEIJING_TZ).strftime("%Y-%m-%d %H:%M:%S")
+    print(f"[{now_beijing}] 开始检查...")
+
     folders = fetch_date_folders()
+    print(f"获取到 {len(folders)} 个日期文件夹，最新: {folders[-1] if folders else '无'}")
+
     if not folders:
         print("未解析到任何日期文件夹，请检查页面结构是否变化。")
         return
@@ -105,12 +125,15 @@ def main():
 
     if new_folders:
         print(f"发现新文件夹: {new_folders}")
+        print("开始发送邮件...")
         send_email(new_folders)
         print("邮件已发送。")
     else:
         print(f"没有新文件夹。当前最新: {folders[-1]}")
 
+    print("保存状态文件...")
     save_seen(folders)
+    print("完成。")
 
 
 def get_next_check_time():
@@ -150,9 +173,15 @@ def sleep_until_next_check():
 
 
 if __name__ == "__main__":
+    if "--once" in sys.argv:
+        print("手动检查模式")
+        main()
+        print("检查完成")
+        sys.exit(0)
+
     print("NEXT 邮件提醒监控已启动")
     print(f"检查时间 (北京时间): {', '.join(f'{h}:00' for h in CHECK_HOURS)}")
-    print("按 Ctrl+C 停止")
+    print("按 Ctrl+C 停止，使用 --once 参数可手动检查一次")
 
     while True:
         try:
