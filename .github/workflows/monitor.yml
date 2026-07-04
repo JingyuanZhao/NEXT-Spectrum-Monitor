@@ -2,7 +2,8 @@ name: 星明天文台NEXT光谱观测邮件提醒
 
 on:
   schedule:
-    - cron: '0 */3 * * *'    # 每 3 小时检查一次
+    # 北京时间 0, 3, 6, 9, 12, 15, 18, 21 点 → UTC 16,19,22,1,4,7,10,13
+    - cron: '0 16,19,22,1,4,7,10,13 * * *'
   workflow_dispatch:          # 也支持手动触发
 
 jobs:
@@ -23,7 +24,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run monitor
-        run: python monitor.py
+        run: python monitor.py --once
         env:
           SMTP_HOST: ${{ secrets.SMTP_HOST }}
           SMTP_PORT: ${{ secrets.SMTP_PORT }}
